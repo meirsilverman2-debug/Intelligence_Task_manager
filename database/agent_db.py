@@ -7,21 +7,40 @@ class AgentDB:
     def __init__(self, instance: DB_connection):
         self.instance = instance
 
-    def create_agent(self):
+    def create_agent(self, data):
         try:
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
             cursor.execute(
                 """
-            insert into agents(name, specialty) values("Daniel", "ninja");
-                """
+            insert into agents(name, specialty) values(%s, %s);
+                """,
+                (data["name"], data["specialty"])
             )
 
             connection.commit()
             print("A new agent as been created wow!")
-            return {"message": "a new agent as been created!"}
 
+            connection.commit()
+            cursor.close()
+
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute(
+                """
+            SELECT * FROM agents 
+            ORDER BY id 
+            DESC
+            LIMiT 1 ;
+ 
+                """
+            )
+
+            result = cursor.fetchone()
+
+            print(result)
+            return result
+        
         except Exception as e:
             print(e)
 
@@ -207,7 +226,23 @@ class AgentDB:
                 v = int(v)
             total["total"] = v
             print(total)
+
+            cursor.execute(
+                """
+            select count(*)as total from missions where assigned_agent_id = %s ;
+                """,
+                (id,)
+            )
+
+            total2 = cursor.fetchone()
+            print(total2)
             
+            num_of_missions = 0
+            for v in total2.values():
+                num_of_missions += v
+
+            total["total"] += num_of_missions
+
             success_rate = (sum(copmleted.values()) / sum(total.values())) * 100
             print(success_rate)
 
@@ -247,6 +282,12 @@ class AgentDB:
 
 
 # for testing the methods.
-# agentdb = AgentDB(db_connection)
-# agentdb.get_agent_performance(1)
+
+agentdb = AgentDB(db_connection)
+
+# d = {"name": "Mimi", "specialty": "singing"}
+# agentdb.create_agent(d)
+
+agentdb.get_agent_performance(1)
+
 # agentdb.agents_active_count()
