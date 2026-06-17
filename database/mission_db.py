@@ -143,8 +143,9 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions where status = "in progress" where id = %s
-                """
+            select count(*) from missions where id = %s and status = "in progress" 
+                """,
+                (id,)
             )
 
             result = cursor.fetchone()
@@ -159,7 +160,26 @@ class MissionDB:
 
 
     def count_all_missions(self):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select count(*) from missions
+                """
+            )
+
+            result = cursor.fetchall()
+
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close
 
     def count_by_status(self, status):
         pass
