@@ -46,19 +46,117 @@ class MissionDB:
             cursor.close()
 
     def get_all_missions(self):
-        pass
+        try:
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select * from missions ;
+                """
+            )
+
+            result = cursor.fetchall()
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
 
     def get_mission_by_id(self, id):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select * from missions where id = %s
+                """,
+                (id,)
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
 
     def assign_mission(self, m_id, a_id):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            update missions
+            set assigned_agent_id = %s
+            where id = %s
+                """,
+                (a_id, m_id)
+            )
+
+            connection.commit()
+            return {"message": f"the mission with the id {m_id} was assigned to agent with id {a_id} successfuly!"}
+        
+        except Exception as e:
+            print(e)
+        
+        finally:
+            cursor.close()
+        
 
     def update_mission_status(self, id, status):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            update missions
+            set status = %s
+            where id = %s
+                """,
+                (status, id)
+            )
+
+            connection.commit()
+            return {"message": f"the status of mission {id} was changed into {status}"}
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
+        
 
     def get_open_missions_by_agent(self, id):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select count(*) from missions where status = "in progress" where id = %s
+                """
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+        
+        finally:
+            cursor.close()
+
 
     def count_all_missions(self):
         pass
