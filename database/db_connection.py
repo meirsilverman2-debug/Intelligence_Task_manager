@@ -30,6 +30,9 @@ class DB_connection:
         except Exception as e:
             print(e)
         
+        finally:
+            cursor.close()
+        
         
 
 
@@ -69,9 +72,11 @@ class DB_connection:
         except Exception as e:
             print(e)
 
+        finally:
+            cursor.close()
         
             
 # for testing the methods in the class.
-# db_connection =DB_connection()
-# db_connection.create_database()
-# db_connection.create_tables()
+db_connection =DB_connection()
+db_connection.create_database()
+db_connection.create_tables()
