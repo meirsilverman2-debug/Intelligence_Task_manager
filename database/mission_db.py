@@ -1,4 +1,4 @@
-from db_connection import DB_connection
+from .db_connection import DB_connection
 
 db_connection = DB_connection()
 

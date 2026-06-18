@@ -118,7 +118,20 @@ Meir Silverman
 212729099
 * ### Class :
 Golan
-
+---
+---
+* ### How to run the program :▶️
+~~~
+git clone https://github.com/meirsilverman2-debug/Intelligence_Task_manager.git
+~~~
+---
+~~~
+pip install -r requirements.txt
+~~~
+---
+~~~
+uvicorn main:app --reload
+~~~
 
 
 

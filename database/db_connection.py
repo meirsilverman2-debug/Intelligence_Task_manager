@@ -59,7 +59,7 @@ class DB_connection:
             location varchar(100),
             difficulty int,
             importance int,
-            status varchar(100),
+            status varchar(100) default "new",
             risk_level varchar(100),
             assigned_agent_id int default null
             );
@@ -76,7 +76,7 @@ class DB_connection:
             cursor.close()
         
             
-# for testing the methods in the class.
-db_connection =DB_connection()
-db_connection.create_database()
-db_connection.create_tables()
+# # for testing the methods in the class.
+# db_connection = DB_connection()
+# db_connection.create_database()
+# db_connection.create_tables()
