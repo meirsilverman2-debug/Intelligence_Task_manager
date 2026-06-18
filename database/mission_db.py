@@ -143,7 +143,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions where id = %s and status = "in progress" 
+            select count(*) as open_missions_by_agent from missions where id = %s and status = "in progress" 
                 """,
                 (id,)
             )
@@ -166,7 +166,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions
+            select count(*) as all_missions from missions
                 """
             )
 
@@ -188,7 +188,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions where status = %s
+            select count(*) as missions_by_status from missions where status = %s
                 """,
                 (status,)
             )
@@ -210,7 +210,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions where status = "assigned" or status = "in_progress" or status = "new"
+            select count(*) as open_missions from missions where status = "assigned" or status = "in_progress" or status = "new"
                 """
             )
 
@@ -232,7 +232,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select count(*) from missions where difficulty = "critical"
+            select count(*) as all_critical_missions from missions where difficulty = "critical"
                 """
             )
 
@@ -254,7 +254,7 @@ class MissionDB:
 
             cursor.execute(
                 """
-            select max(completed_missions), (name) as top_agent
+            select max(completed_missions) as top_completed_missions, (name) as top_agent
             from agents 
             group by name 
             limit 1 
@@ -275,6 +275,15 @@ class MissionDB:
 
 
 # for testing the methods.            
-# d = {"title": "drawing","description": "to draw soldiers","location": "Jerusalem"}
-# missiondb = MissionDB(db_connection)
-# missiondb.creat_mission(d)
+d = {"title": "drawing","description": "to draw soldiers","location": "Jerusalem"}
+missiondb = MissionDB(db_connection)
+missiondb.creat_mission(d)
+missiondb.assign_mission(1, 1)
+missiondb.count_all_missions()
+missiondb.count_by_status("new")
+missiondb.count_critical_missions()
+missiondb.get_top_agent()
+missiondb.get_mission_by_id(1)
+missiondb.update_mission_status(3,"in_progress")
+missiondb.count_open_missions()
+missiondb.get_open_missions_by_agent(1)
