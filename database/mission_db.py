@@ -182,17 +182,94 @@ class MissionDB:
             cursor.close
 
     def count_by_status(self, status):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select count(*) from missions where status = %s
+                """,
+                (status,)
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
 
     def count_open_missions(self):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select count(*) from missions where status = "assigned" or status = "in_progress" or status = "new"
+                """
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
+
 
     def count_critical_missions(self):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select count(*) from missions where difficulty = "critical"
+                """
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
+
 
     def get_top_agent(self):
-        pass
+        try: 
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
 
+            cursor.execute(
+                """
+            select max(completed_missions), (name) as top_agent
+            from agents 
+            group by name 
+            limit 1 
+                """
+            )
+
+            result = cursor.fetchone()
+            print(result)
+            return result
+        
+        except Exception as e:
+            print(e)
+
+        finally:
+            cursor.close()
 
 
 
