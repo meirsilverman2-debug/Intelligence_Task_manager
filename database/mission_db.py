@@ -1,8 +1,12 @@
 from .db_connection import DB_connection
 from model.mission_model import Mission
 from fastapi import HTTPException
+from .agent_db import agentdb
+
+
 
 db_connection = DB_connection()
+agentdb
 
 class MissionDB:
     def __init__(self, instance: DB_connection):
@@ -28,6 +32,13 @@ class MissionDB:
             
             else:
                 risk_level = "low"
+
+
+            if 1 > data.importance > 10 :
+                raise HTTPException(403, "you are forbidden from entering importance numbers that are  smaller than one and more than greater") 
+
+            if 1 > data.difficulty > 10 :
+                raise HTTPException(403, "you are forbidden from entering difficulty numbers that are  smaller than one and more than greater") 
 
             cursor.execute(
                 """
@@ -111,10 +122,29 @@ class MissionDB:
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
+            agent = agentdb.get_agent_by_id(a_id)
+            print(agent)
+            mission = self.get_mission_by_id(m_id)
+            print(mission)
+
+            if agent["is_active"] == False:
+                raise HTTPException(403, "you cannot assigned missions to an agent that is not active you need to understand it")
+
+            if agent["agent_rank"] != "Commander"  and mission["risk_level"] == "critical" :
+                raise HTTPException(403, "an agent with the rank lower than commander cannot take a mission with risk level fo critical")
+            
+            if mission["status"] != "new":
+                raise HTTPException(403, "you cannot assigned a mission unless its status is 'new' understood")
+
+
+            connection = self.instance.get_connection()
+            cursor = connection.cursor(dictionary=True)
+
             cursor.execute(
                 """
             update missions
-            set assigned_agent_id = %s
+            set assigned_agent_id = %s,
+            status = 'assigned'
             where id = %s
                 """,
                 (a_id, m_id)
@@ -145,10 +175,10 @@ class MissionDB:
 
             data = cursor.fetchone()
             if status == "cancelled" and data["status"] == "new" or data["status"] == "in_progress":
-                raise HTTPException(403,"you ar forbidden to cancelled a mission while it is in progress or a new mission ok")
+                raise HTTPException(403,"you are forbidden to cancelled a mission while it is in progress or a new mission ok")
             
             elif status == "completed" or status == "failed" and data["status"] != "in_progress":
-                raise HTTPException(403,"you ar forbidden to finish the mission or deem it failed mission when it is any other status rather than in_progress ")
+                raise HTTPException(403,"you are forbidden to finish the mission or deem it failed mission when it is any other status rather than in_progress ")
 
             cursor.execute(
                 """
