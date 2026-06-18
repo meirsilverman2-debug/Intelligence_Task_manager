@@ -1,5 +1,6 @@
 from .db_connection import DB_connection
 from model.agent_model import Agent
+from fastapi import HTTPException
 
 
 db_connection = DB_connection()
@@ -73,6 +74,11 @@ class AgentDB:
 
     def get_agent_by_id(self, id):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
@@ -95,6 +101,11 @@ class AgentDB:
 
     def update_agent(self, id, data: Agent):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
@@ -122,6 +133,11 @@ class AgentDB:
 
     def deactivate_id(self, id):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
@@ -147,6 +163,11 @@ class AgentDB:
 
     def increment_completed(self, id):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
@@ -172,6 +193,11 @@ class AgentDB:
 
     def increment_failed(self, id):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
             cursor.execute(
@@ -196,6 +222,11 @@ class AgentDB:
 
     def get_agent_performance(self, id):
         try:
+            agents = self.get_all_agents()
+            for agent in agents:
+                if id not in agent.values():
+                    raise HTTPException(404, f"there is not any agent withe the id {id}")
+                    
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
