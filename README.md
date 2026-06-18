@@ -147,6 +147,24 @@ pip install -r requirements.txt
 ~~~
 uvicorn main:app --reload
 ~~~
+---
+---
+* ## List of all of the endpoints :
+---
+* ### Agents endpoints :
+
+![alt text](image-3.png)
+---
+* ### Missions endpoints :
+
+![alt text](image-4.png)
+![alt text](image-5.png)
+---
+* ### Reports endpoints :
+
+![alt text](image-6.png)
+
+
 
 
 
