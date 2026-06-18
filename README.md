@@ -14,6 +14,14 @@ intelligence-task-manager/
 │ ├── agent_db.py
 │ └── mission_db.py
 │
+├──logs/
+│   ├── logger_config.py
+│   └── system.log
+│
+├── model/
+│    ├── agent_model.py
+│    └── mission_model.py
+│
 ├──routes/
 │ ├── agent_routes.py
 │ ├── mission_routes.py
@@ -21,7 +29,8 @@ intelligence-task-manager/
 │
 ├── README.md (hy it's me 🙃)
 ├── requirements.txt
-└── .gitignore
+├── .gitignore
+└── main.py
 ~~~
 ---
 ---
