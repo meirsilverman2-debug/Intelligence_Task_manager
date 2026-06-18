@@ -1,12 +1,14 @@
 from fastapi import APIRouter
 from database.agent_db import agentdb
 from database.mission_db import missiondb
+from logs.logger_config import logger
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 
 
 @router.get("/reports/summary")
 def get_summary():
+    logger.info("get/reports/summary call")
 
     summary ={}
             
@@ -22,6 +24,7 @@ def get_summary():
 
 @router.get("/reports/missions-by-status")
 def get_missions_by_status():
+    logger.info("get/reports/missions-by-status call")
 
     missions = {}
 
@@ -37,6 +40,7 @@ def get_missions_by_status():
 
 @router.get("/reports/top-agent")
 def get_top_student():
+    logger.info("get/reports/top-agent call")
     return missiondb.get_top_agent()
 
 

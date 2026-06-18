@@ -2,6 +2,7 @@ from .db_connection import DB_connection
 from model.mission_model import Mission
 from fastapi import HTTPException
 from .agent_db import agentdb
+from logs.logger_config import logger
 
 
 
@@ -35,9 +36,11 @@ class MissionDB:
 
 
             if 1 > data.importance > 10 :
+                logger.error("numbers less than 1 or more than 10 is a big no no ")
                 raise HTTPException(403, "you are forbidden from entering importance numbers that are  smaller than one and more than greater") 
 
             if 1 > data.difficulty > 10 :
+                logger.error("numbers less than 1 or more than 10 is a big no no ")
                 raise HTTPException(403, "you are forbidden from entering difficulty numbers that are  smaller than one and more than greater") 
 
             cursor.execute(
