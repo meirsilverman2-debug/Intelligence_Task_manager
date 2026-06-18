@@ -1,4 +1,5 @@
 import mysql.connector
+from logs.logger_config import logger
 
 class DB_connection:
 
@@ -67,6 +68,7 @@ class DB_connection:
             )
 
             print("The two tables have been created right now or they are already exists")
+            logger.info("The two tables have been created right now or they are already exists")
             return {"message": "the two tables have been created right now or they are already exists"}
             
         except Exception as e:
