@@ -14,7 +14,7 @@ def create_agent(data: Agent):
 
 @router.get("/gents")
 def get_all_agents():
-    agentdb.get_all_agents()
+    return agentdb.get_all_agents()
 
 
 @router.get("/agents/{id}")

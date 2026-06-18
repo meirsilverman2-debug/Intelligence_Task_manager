@@ -1,5 +1,6 @@
 from .db_connection import DB_connection
 from model.mission_model import Mission
+from fastapi import HTTPException
 
 db_connection = DB_connection()
 
@@ -13,14 +14,30 @@ class MissionDB:
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
 
+            level_risk = data.difficulty * 2 + data.importance
+            risk_level = ""
+
+            if  17 >= level_risk >= 10 :
+                risk_level = "MEDIUM"
+
+            elif 18 >= level_risk >= 24:
+                risk_level = "HIGH"
+
+            elif level_risk >= 25 :
+                risk_level = "CRITICAL"
+            
+            else:
+                risk_level = "low"
+
             cursor.execute(
                 """
             insert into missions
-            (title, description, location)
-            values(%s, %s, %s);
+            (title, description, location, difficulty, importance, risk_level)
+            values(%s, %s, %s, %s, %s, %s);
                 """,
-            (data.title, data.description, data.location)
+            (data.title, data.description, data.location, data.difficulty, data.importance, risk_level)
             )
+
             connection.commit()
             cursor.close()
 
@@ -114,9 +131,24 @@ class MissionDB:
         
 
     def update_mission_status(self, id, status):
+
         try: 
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(
+                """
+            select * from missions where id = %s
+                """,
+                (id,)
+            )
+
+            data = cursor.fetchone()
+            if status == "cancelled" and data["status"] == "new" or data["status"] == "in_progress":
+                raise HTTPException(403,"you ar forbidden to cancelled a mission while it is in progress or a new mission ok")
+            
+            elif status == "completed" or status == "failed" and data["status"] != "in_progress":
+                raise HTTPException(403,"you ar forbidden to finish the mission or deem it failed mission when it is any other status rather than in_progress ")
 
             cursor.execute(
                 """
@@ -274,17 +306,18 @@ class MissionDB:
 
 
 
-
-# for testing the methods.            
-d = {"title": "drawing","description": "to draw soldiers","location": "Jerusalem"}
 missiondb = MissionDB(db_connection)
-missiondb.creat_mission(d)
-missiondb.assign_mission(1, 1)
-missiondb.count_all_missions()
-missiondb.count_by_status("new")
-missiondb.count_critical_missions()
-missiondb.get_top_agent()
-missiondb.get_mission_by_id(1)
-missiondb.update_mission_status(3,"in_progress")
-missiondb.count_open_missions()
-missiondb.get_open_missions_by_agent(1)
+
+# for testing the methods.
+             
+# d = {"title": "drawing","description": "to draw soldiers","location": "Jerusalem"}
+# missiondb.creat_mission(d)
+# missiondb.assign_mission(1, 1)
+# missiondb.count_all_missions()
+# missiondb.count_by_status("new")
+# missiondb.count_critical_missions()
+# missiondb.get_top_agent()
+# missiondb.get_mission_by_id(1)
+# missiondb.update_mission_status(3,"in_progress")
+# missiondb.count_open_missions()
+# missiondb.get_open_missions_by_agent(1)

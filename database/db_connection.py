@@ -57,8 +57,8 @@ class DB_connection:
             title varchar(100) not null,
             description text,
             location varchar(100),
-            difficulty int,
-            importance int,
+            difficulty int(9) not null,
+            importance int(9) not null,
             status varchar(100) default "new",
             risk_level varchar(100),
             assigned_agent_id int default null
