@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from database.agent_db import agentdb
+from model.agent_model import Agent
 
 agentdb.get_agent_performance
 
@@ -7,7 +8,7 @@ agentdb.get_agent_performance
 router = APIRouter(prefix="/agentes", tags=["agentes"])
 
 @router.post("/gents")
-def create_agent(data: dict):
+def create_agent(data: Agent):
     return agentdb.create_agent(data)
 
 
@@ -22,7 +23,7 @@ def get_agent_by_id(id: int):
 
 
 @router.put("/agents/{id}")
-def update_agent(id: int, data: dict):
+def update_agent(id: int, data: Agent):
     return agentdb.update_agent(id, data)
 
 

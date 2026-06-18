@@ -1,4 +1,6 @@
 from .db_connection import DB_connection
+from model.agent_model import Agent
+
 
 db_connection = DB_connection()
 
@@ -7,7 +9,7 @@ class AgentDB:
     def __init__(self, instance: DB_connection):
         self.instance = instance
 
-    def create_agent(self, data):
+    def create_agent(self, data: Agent):
         try:
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
@@ -16,16 +18,16 @@ class AgentDB:
                 """
             insert into agents(name, specialty) values(%s, %s);
                 """,
-                (data["name"], data["specialty"])
+                (data.name, data.specialty)
             )
 
             connection.commit()
             print("A new agent as been created wow!")
 
-            connection.commit()
-            cursor.close()
+            # connection.commit()
+            # cursor.close()
 
-            cursor = connection.cursor(dictionary=True)
+            # cursor = connection.cursor(dictionary=True)
             cursor.execute(
                 """
             SELECT * FROM agents 
@@ -91,7 +93,7 @@ class AgentDB:
             cursor.close()
 
 
-    def update_agent(self, id, data):
+    def update_agent(self, id, data: Agent):
         try:
             connection = self.instance.get_connection()
             cursor = connection.cursor(dictionary=True)
@@ -104,7 +106,7 @@ class AgentDB:
             agent_rank = %s
             where id = %s
                 """,
-                (data["name"], data["specialty"], data["agent_rank"], id)
+                (data.name, data.specialty, data.agent_rank, id)
             )
 
             connection.commit()
@@ -285,9 +287,9 @@ class AgentDB:
 
 agentdb = AgentDB(db_connection)
 
-# d = {"name": "Mimi", "specialty": "singing"}
-# agentdb.create_agent(d)
+d = {"name": "Mimi", "specialty": "singing"}
+agentdb.create_agent(d)
 
-agentdb.get_agent_performance(1)
+# agentdb.get_agent_performance(1)
 
 # agentdb.agents_active_count()

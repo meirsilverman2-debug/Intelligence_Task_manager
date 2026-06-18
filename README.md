@@ -13,7 +13,13 @@ intelligence-task-manager/
 │ ├── db_connection.py
 │ ├── agent_db.py
 │ └── mission_db.py
-├── README.md
+│
+├──routes/
+│ ├── agent_routes.py
+│ ├── mission_routes.py
+│ └── report_routes.py
+│
+├── README.md (hy it's me 🙃)
 ├── requirements.txt
 └── .gitignore
 ~~~

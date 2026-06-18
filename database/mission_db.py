@@ -1,4 +1,5 @@
 from .db_connection import DB_connection
+from model.mission_model import Mission
 
 db_connection = DB_connection()
 
@@ -6,7 +7,7 @@ class MissionDB:
     def __init__(self, instance: DB_connection):
         self.instance = instance
 
-    def creat_mission(self, data):
+    def creat_mission(self, data: Mission):
 
         try:
             connection = self.instance.get_connection()
@@ -18,7 +19,7 @@ class MissionDB:
             (title, description, location)
             values(%s, %s, %s);
                 """,
-            (data["title"], data["description"], data["location"] )
+            (data.title, data.description, data.location)
             )
             connection.commit()
             cursor.close()

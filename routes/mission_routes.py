@@ -1,12 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from database.mission_db import missiondb
+from model.mission_model import Mission
 
 
 router = APIRouter(prefix="/missions", tags=["missions"])
 
 
 @router.post("/missions")
-def creat_mission(data: dict):
+def creat_mission(data: Mission):
     return missiondb.creat_mission(data)
 
 
